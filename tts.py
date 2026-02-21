@@ -1,27 +1,23 @@
-import pyttsx3
+import asyncio
+import edge_tts
 
-def init_engine():
-    engine = pyttsx3.init()
-    
-    # Adjust speed (lower = deeper feel)
-    engine.setProperty('rate', 135)
-    engine.setProperty('volume', 1.0)
-    
-    return engine
+async def _generate_audio_async(text: str, output_path: str):
+    communicate = edge_tts.Communicate(
+        text=text,
+        voice="en-IN-PrabhatNeural"
+    )
+    await communicate.save(output_path)
 
-engine = init_engine()
 
-def speak(text: str):
-    if not text or text.strip() == "":
-        print("Empty text. Nothing to speak.")
+def generate_audio(text: str, output_path: str):
+    if not text.strip():
+        print("Empty text")
         return
     
-    print("Bot speaking...")
-    engine.say(text)
-    engine.runAndWait()
+    asyncio.run(_generate_audio_async(text, output_path))
+    print("Audio saved to:", output_path)
 
 
-# Allow standalone testing
 if __name__ == "__main__":
     user_input = input("Enter text to speak: ")
-    speak(user_input)
+    generate_audio(user_input, "response.mp3")

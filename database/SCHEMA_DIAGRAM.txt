@@ -1,0 +1,198 @@
+================================================================================
+DATABASE SCHEMA DIAGRAM
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     CUSTOMER SUPPORT CHATBOT DATABASE                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────┐
+│     CUSTOMERS        │
+├──────────────────────┤
+│ customer_id (PK)     │◄─────┐
+│ email                │      │
+│ full_name            │      │
+│ phone                │      │
+│ account_status       │      │
+│ created_at           │      │
+└──────────────────────┘      │
+                              │
+                              │ FK
+                              │
+┌──────────────────────┐      │      ┌──────────────────────────────────┐
+│      ORDERS          │      │      │  CUSTOMER_SUPPORT_TICKETS        │
+├──────────────────────┤      │      ├──────────────────────────────────┤
+│ order_id (PK)        │◄─────┼──────┤ ticket_id (PK)                   │
+│ customer_id (FK)     │──────┘      │ customer_id (FK)                 │
+│ order_number         │             │ order_id (FK)                    │
+│ order_status         │             │ issue_category                   │
+│ total_amount         │             │ issue_subcategory                │
+│ order_date           │             │ subject                          │
+│ delivery_date        │             │ description                      │
+└──────────────────────┘             │ chatbot_handled                  │
+                                     │ chatbot_confidence_score         │
+                                     │ status                           │
+                                     │ priority                         │
+                                     │ assigned_agent_id (FK)           │
+                                     │ customer_sentiment               │
+                                     │ created_at                       │
+                                     │ updated_at                       │
+                                     │ resolved_at                      │
+                                     │ resolution_notes                 │
+                                     └──────────────────────────────────┘
+                                                    │
+                                                    │ FK
+                                                    │
+                                                    ▼
+                                     ┌──────────────────────────────────┐
+                                     │  CHATBOT_CONVERSATIONS           │
+                                     ├──────────────────────────────────┤
+                                     │ message_id (PK)                  │
+                                     │ ticket_id (FK)                   │
+                                     │ sender_type                      │
+                                     │ message_text                     │
+                                     │ intent_detected                  │
+                                     │ confidence_score                 │
+                                     │ created_at                       │
+                                     └──────────────────────────────────┘
+
+
+┌──────────────────────┐             ┌──────────────────────────────────┐
+│  SUPPORT_AGENTS      │             │     CHATBOT_METRICS              │
+├──────────────────────┤             ├──────────────────────────────────┤
+│ agent_id (PK)        │             │ metric_id (PK)                   │
+│ agent_name           │             │ date                             │
+│ email                │             │ total_tickets                    │
+│ specialization       │             │ chatbot_resolved                 │
+│ is_available         │             │ escalated_to_human               │
+│ created_at           │             │ avg_confidence_score             │
+└──────────────────────┘             │ avg_resolution_time_minutes      │
+         │                           │ customer_satisfaction_score      │
+         │ FK                        └──────────────────────────────────┘
+         │
+         └──────────────────────────► assigned_agent_id in TICKETS
+
+
+================================================================================
+RELATIONSHIPS
+================================================================================
+
+1. CUSTOMERS → ORDERS (One-to-Many)
+   - One customer can have multiple orders
+
+2. CUSTOMERS → TICKETS (One-to-Many)
+   - One customer can create multiple support tickets
+
+3. ORDERS → TICKETS (One-to-Many)
+   - One order can have multiple support tickets
+
+4. TICKETS → CONVERSATIONS (One-to-Many)
+   - One ticket can have multiple conversation messages
+
+5. AGENTS → TICKETS (One-to-Many)
+   - One agent can be assigned to multiple tickets
+
+
+================================================================================
+KEY FIELDS EXPLAINED
+================================================================================
+
+CHATBOT_HANDLED (0 or 1)
+├─ 0 = Requires human intervention
+└─ 1 = Successfully resolved by chatbot
+
+CHATBOT_CONFIDENCE_SCORE (0-100)
+├─ 0-60   = Low confidence (likely needs escalation)
+├─ 60-80  = Medium confidence (monitor)
+└─ 80-100 = High confidence (bot can handle)
+
+STATUS
+├─ Open       = New ticket, not yet processed
+├─ In Progress = Being worked on
+├─ Resolved   = Issue fixed
+├─ Escalated  = Sent to human agent
+└─ Closed     = Completed and archived
+
+PRIORITY
+├─ Low    = Can wait
+├─ Medium = Normal priority
+├─ High   = Needs attention soon
+└─ Urgent = Immediate action required
+
+CUSTOMER_SENTIMENT
+├─ Positive = Happy customer
+├─ Neutral  = Neutral tone
+└─ Negative = Unhappy customer
+
+SENDER_TYPE (in conversations)
+├─ Customer = Message from customer
+├─ Chatbot  = Message from AI bot
+└─ Agent    = Message from human agent
+
+
+================================================================================
+INDEXES (for performance)
+================================================================================
+
+✓ idx_tickets_customer    → Fast customer lookup
+✓ idx_tickets_status      → Filter by status
+✓ idx_tickets_created     → Time-based queries
+✓ idx_conversations_ticket → Conversation retrieval
+✓ idx_orders_customer     → Order lookup
+
+
+================================================================================
+SAMPLE DATA FLOW
+================================================================================
+
+1. Customer creates ticket
+   ↓
+2. Chatbot analyzes intent
+   ↓
+3. Conversation logged with confidence scores
+   ↓
+4. Decision point:
+   ├─ High confidence (>80%) → Bot resolves → Status: Resolved
+   └─ Low confidence (<70%)  → Escalate → Status: Escalated
+                                          ↓
+                                    Assign to agent
+                                          ↓
+                                    Agent resolves
+                                          ↓
+                                    Status: Resolved
+
+
+================================================================================
+TYPICAL WORKFLOW
+================================================================================
+
+┌─────────────┐
+│   Customer  │
+│   submits   │
+│   ticket    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   Chatbot   │
+│   analyzes  │
+│   intent    │
+└──────┬──────┘
+       │
+       ├─────────────┬─────────────┐
+       │             │             │
+       ▼             ▼             ▼
+  High Conf     Medium Conf    Low Conf
+  (>80%)        (60-80%)       (<60%)
+       │             │             │
+       ▼             ▼             ▼
+  Bot Resolves   Monitor      Escalate
+       │             │             │
+       ▼             ▼             ▼
+  Resolved      In Progress   Agent Handles
+                                   │
+                                   ▼
+                               Resolved
+
+
+================================================================================

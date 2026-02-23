@@ -1,47 +1,33 @@
 import pickle
-import re
+from sentence_transformers import SentenceTransformer
 
 
-# ----------------------------
-# Load saved components
-# ----------------------------
-
+# Load trained classifier
 with open("intent_model.pkl", "rb") as f:
     model = pickle.load(f)
-
-with open("vectorizer.pkl", "rb") as f:
-    vectorizer = pickle.load(f)
 
 with open("label_encoder.pkl", "rb") as f:
     label_encoder = pickle.load(f)
 
+# Load embedding model
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
-# ----------------------------
-# Text Cleaning (same as training)
-# ----------------------------
-
-def clean_text(text):
-    text = str(text).lower()
-    text = re.sub(r"[^\w\s]", "", text)
-    text = re.sub(r"\s+", " ", text)
-    return text.strip()
-
-
-# ----------------------------
-# Predict Function
-# ----------------------------
 
 def predict_intent(user_text):
-    cleaned = clean_text(user_text)
-    vectorized = vectorizer.transform([cleaned])
-    prediction = model.predict(vectorized)[0]
-    intent = label_encoder.inverse_transform([prediction])[0]
+    embedding = embedder.encode([user_text])
+    
+    probs = model.predict_proba(embedding)[0]
+    max_prob = max(probs)
+    predicted_index = probs.argmax()
+    
+    intent = label_encoder.inverse_transform([predicted_index])[0]
+
+    # Confidence threshold
+    if max_prob < 0.55:
+        return "uncertain"
+
     return intent
 
-
-# ----------------------------
-# Standalone test
-# ----------------------------
 
 if __name__ == "__main__":
     while True:

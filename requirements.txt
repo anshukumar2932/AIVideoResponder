@@ -1,8 +1,11 @@
+whisper
 openai-whisper
-# torch>=2.0.0
-sounddevice
+torch
+sentence-transformers
+scikit-learn
+pandas
 numpy
+sounddevice
 scipy
 edge-tts
-whisper
-opencv-python
+playsound==1.2.2

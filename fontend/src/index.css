@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-blue: #2b8ef7;
+  --hero-gradient-start: #c4478c;
+  --hero-gradient-end: #e8a87c;
+  --hero-gradient-top: #b83aaa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #0f0f12;
+  color: #fff;
+}
+
+/* Focus-visible ring */
+:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 3px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3a5c;
+  border-radius: 3px;
+}
+
+/* Hero gradient frame */
+.hero-frame {
+  background:
+    linear-gradient(to right, var(--hero-gradient-start) 0%, transparent 18%),
+    linear-gradient(to left, var(--hero-gradient-end) 0%, transparent 18%),
+    linear-gradient(to bottom, var(--hero-gradient-top) 0%, transparent 12%);
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Choice card glow on hover */
+.choice-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.choice-card:hover,
+.choice-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 2px var(--brand-blue), 0 20px 40px rgba(43, 142, 247, 0.25);
+  border-color: var(--brand-blue);
+}
+.choice-card[aria-selected="true"] {
+  box-shadow: 0 0 0 2px var(--brand-blue), 0 20px 40px rgba(43, 142, 247, 0.35);
+  border-color: var(--brand-blue);
+  background: rgba(43, 142, 247, 0.1);
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--brand-blue);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Trusted logos */
+.logo-row {
+  filter: brightness(0) invert(1);
+  opacity: 0.55;
+}

@@ -70,6 +70,7 @@ export default function VideoHelpPage() {
             }
 
             const data = await response.json()
+            console.log("Backend response:", data)
 
             if (data.error) {
                 setError(data.error)
@@ -77,15 +78,17 @@ export default function VideoHelpPage() {
                 setUserText(data.user_text)
                 setResponse(data.response)
                 
-                // Handle video or audio response
+                // Handle video response
                 if (data.video_available && data.video_url) {
-                    setVideoUrl(`${API_BASE_URL}${data.video_url}?t=${new Date().getTime()}`)
-                } else if (data.audio_url) {
-                    // For audio-only response, show a message
-                    setResponse(data.response + "\n\n(Audio response generated - video not available in this environment)")
+                    const videoUrl = `${API_BASE_URL}${data.video_url}?t=${new Date().getTime()}`
+                    console.log("Setting video URL:", videoUrl)
+                    setVideoUrl(videoUrl)
                 } else {
-                    // Text-only response
-                    setResponse(data.response + "\n\n" + (data.video_message || "Video generation not available"))
+                    // Show message about video availability
+                    console.log("Video not available:", data.video_message)
+                    if (data.video_message) {
+                        setError(`Video: ${data.video_message}`)
+                    }
                 }
             }
         } catch (err) {

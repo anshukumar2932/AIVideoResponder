@@ -3,36 +3,27 @@ import os
 
 # Server socket
 bind = f"0.0.0.0:{os.environ.get('PORT', 5000)}"
-backlog = 2048
+backlog = 512
 
-# Worker processes
-workers = 1  # Single worker for free tier
+# Worker processes - optimized for Render free tier
+workers = 1
 worker_class = "sync"
-worker_connections = 1000
-timeout = 120
+worker_connections = 100
+timeout = 300  # Increased for model loading
 keepalive = 2
 
-# Restart workers after this many requests, to help control memory usage
-max_requests = 1000
-max_requests_jitter = 100
+# Memory management
+max_requests = 100
+max_requests_jitter = 10
 
 # Logging
 accesslog = "-"
 errorlog = "-"
 loglevel = "info"
-access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s'
-
-# Process naming
-proc_name = "aivideo-backend"
 
 # Server mechanics
 preload_app = True
 daemon = False
-pidfile = None
-user = None
-group = None
-tmp_upload_dir = None
 
-# SSL (not needed for Render)
-keyfile = None
-certfile = None
+# Render-specific optimizations
+worker_tmp_dir = "/dev/shm"  # Use shared memory for better performance

@@ -115,24 +115,36 @@ def customer_support():
             logger.warning(f"Audio generation failed: {audio_error}")
             response_audio_path = None
 
-        # 5️⃣ For Render deployment, skip video generation due to ffmpeg requirements
-        # Instead, return audio URL or fallback message
+        # 5️⃣ Video Generation
         video_available = False
-        video_message = "Video generation is not available in this deployment environment."
+        video_message = "Video generation failed"
+        final_video_path = os.path.join(os.getcwd(), FINAL_VIDEO)
         
-        # Check if we're in a development environment
-        if os.path.exists("/usr/bin/ffmpeg") or os.path.exists("/usr/local/bin/ffmpeg"):
-            try:
-                # Only attempt video generation if ffmpeg is available
-                from generate_video import generate_video
-                generate_video(response_text, response_audio_path, FINAL_VIDEO)
+        try:
+            # Check if ffmpeg is available
+            import subprocess
+            subprocess.run(["ffmpeg", "-version"], capture_output=True, check=True)
+            
+            # Import and run video generation
+            from generate_video import generate_video
+            generate_video(response_text, response_audio_path, final_video_path)
+            
+            if os.path.exists(final_video_path):
                 video_available = True
                 video_message = "Video generated successfully"
-                logger.info("Video generated successfully")
-            except Exception as video_error:
-                logger.warning(f"Video generation failed: {video_error}")
-                video_available = False
-                video_message = f"Video generation failed: {str(video_error)}"
+                logger.info(f"Video generated successfully at: {final_video_path}")
+            else:
+                logger.warning(f"Video file not created at: {final_video_path}")
+                
+        except subprocess.CalledProcessError:
+            logger.warning("ffmpeg not available - video generation skipped")
+            video_message = "Video generation not available (ffmpeg missing)"
+        except ImportError as e:
+            logger.warning(f"Video generation module not available: {e}")
+            video_message = "Video generation module not available"
+        except Exception as video_error:
+            logger.warning(f"Video generation failed: {video_error}")
+            video_message = f"Video generation failed: {str(video_error)}"
 
         # Clean up uploaded audio file
         try:
@@ -173,15 +185,22 @@ def customer_support():
 # ==============================
 @app.route("/video")
 def serve_video():
-    if not os.path.exists(FINAL_VIDEO):
+    final_video_path = os.path.join(os.getcwd(), FINAL_VIDEO)
+    
+    if not os.path.exists(final_video_path):
+        logger.error(f"Video file not found at: {final_video_path}")
+        logger.info(f"Current directory: {os.getcwd()}")
+        logger.info(f"Files in current directory: {os.listdir('.')}")
         return jsonify({
             "error": "Video not available", 
-            "message": "Video generation is not supported in this deployment environment"
+            "message": "Video file not found",
+            "path_checked": final_video_path
         }), 404
 
     try:
+        logger.info(f"Serving video from: {final_video_path}")
         return send_file(
-            FINAL_VIDEO,
+            final_video_path,
             mimetype="video/mp4",
             as_attachment=False
         )
@@ -209,6 +228,51 @@ def serve_audio(file_id):
     except Exception as e:
         logger.error(f"Error serving audio: {str(e)}")
         return jsonify({"error": "Failed to serve audio"}), 500
+
+
+# ==============================
+# Test Video Generation Endpoint
+# ==============================
+@app.route("/test-video", methods=["POST"])
+def test_video():
+    """Test endpoint to check video generation"""
+    try:
+        test_text = "Hello, this is a test video generation."
+        test_audio = "test_audio.mp3"
+        test_video = "test_video.mp4"
+        
+        # Generate test audio
+        generate_audio(test_text, test_audio)
+        logger.info(f"Test audio generated: {test_audio}")
+        
+        # Try video generation
+        from generate_video import generate_video
+        generate_video(test_text, test_audio, test_video)
+        
+        video_exists = os.path.exists(test_video)
+        
+        # Clean up test files
+        try:
+            if os.path.exists(test_audio):
+                os.remove(test_audio)
+            if os.path.exists(test_video):
+                os.remove(test_video)
+        except:
+            pass
+            
+        return jsonify({
+            "success": True,
+            "video_generated": video_exists,
+            "message": "Video generation test completed"
+        })
+        
+    except Exception as e:
+        logger.error(f"Video generation test failed: {e}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "message": "Video generation test failed"
+        }), 500
 
 
 # ==============================

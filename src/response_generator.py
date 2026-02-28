@@ -2,7 +2,7 @@ import random
 
 RESPONSES = {
 
-    # 1️⃣ CANCEL ORDER
+    #  CANCEL ORDER
     "cancel_order": [
         "Your order has been successfully canceled.",
         "I've processed the cancellation for you.",
@@ -10,7 +10,7 @@ RESPONSES = {
         "Cancellation confirmed. You’ll receive an email shortly."
     ],
 
-    # 2️⃣ CHANGE ORDER
+    #  CHANGE ORDER
     "change_order": [
         "Sure, I can help modify your order.",
         "Let’s update your order details.",
@@ -18,7 +18,7 @@ RESPONSES = {
         "Tell me what changes you'd like to make."
     ],
 
-    # 3️⃣ CHANGE SHIPPING ADDRESS
+    #  CHANGE SHIPPING ADDRESS
     "change_shipping_address": [
         "I can help update your shipping address.",
         "Let’s modify the delivery address.",
@@ -26,7 +26,7 @@ RESPONSES = {
         "Please provide the new address details."
     ],
 
-    # 4️⃣ CHECK CANCELLATION FEE
+    #  CHECK CANCELLATION FEE
     "check_cancellation_fee": [
         "Let me check if any cancellation fee applies.",
         "I’ll verify the cancellation charges for you.",
@@ -34,7 +34,7 @@ RESPONSES = {
         "I’m reviewing the fee details now."
     ],
 
-    # 5️⃣ CHECK INVOICE
+    #  CHECK INVOICE
     "check_invoice": [
         "Let me check your invoice details.",
         "I’ll retrieve the invoice information.",
@@ -42,7 +42,7 @@ RESPONSES = {
         "I’m checking your billing information."
     ],
 
-    # 6️⃣ CHECK PAYMENT METHODS
+    #  CHECK PAYMENT METHODS
     "check_payment_methods": [
         "We accept multiple payment methods including card and online banking.",
         "Let me share the available payment options.",
@@ -50,7 +50,7 @@ RESPONSES = {
         "Here are the supported payment methods."
     ],
 
-    # 7️⃣ CHECK REFUND POLICY
+    #  CHECK REFUND POLICY
     "check_refund_policy": [
         "Let me explain our refund policy.",
         "Refunds are processed based on our policy terms.",
@@ -58,7 +58,7 @@ RESPONSES = {
         "Here’s how our refund policy works."
     ],
 
-    # 8️⃣ COMPLAINT
+    #  COMPLAINT
     "complaint": [
         "I’m sorry to hear about your experience.",
         "Let me help resolve your concern.",
@@ -66,7 +66,7 @@ RESPONSES = {
         "I’ll escalate this issue immediately."
     ],
 
-    # 9️⃣ CONTACT CUSTOMER SERVICE
+    #  CONTACT CUSTOMER SERVICE
     "contact_customer_service": [
         "You can reach our customer service team anytime.",
         "I’ll provide the contact details for support.",
@@ -74,7 +74,7 @@ RESPONSES = {
         "Let me guide you to customer service."
     ],
 
-    # 🔟 CONTACT HUMAN AGENT
+    # CONTACT HUMAN AGENT
     "contact_human_agent": [
         "I’ll connect you with a human representative.",
         "Please hold while I transfer you to an agent.",
@@ -82,7 +82,7 @@ RESPONSES = {
         "Let me escalate this to a human support agent."
     ],
 
-    # 1️⃣1️⃣ CREATE ACCOUNT
+    #  CREATE ACCOUNT
     "create_account": [
         "I can help you create a new account.",
         "Let’s get your account set up.",
@@ -90,7 +90,7 @@ RESPONSES = {
         "Creating an account is quick and simple."
     ],
 
-    # 1️⃣2️⃣ DELETE ACCOUNT
+    #  DELETE ACCOUNT
     "delete_account": [
         "I can assist with deleting your account.",
         "Let me help you close your account.",
@@ -98,7 +98,7 @@ RESPONSES = {
         "I’ll guide you through the account removal process."
     ],
 
-    # 1️⃣3️⃣ DELIVERY OPTIONS
+    #  DELIVERY OPTIONS
     "delivery_options": [
         "We offer multiple delivery options.",
         "Let me explain the available shipping methods.",
@@ -106,7 +106,7 @@ RESPONSES = {
         "Here are the delivery options available."
     ],
 
-    # 1️⃣4️⃣ DELIVERY PERIOD
+    #  DELIVERY PERIOD
     "delivery_period": [
         "Delivery time depends on your location.",
         "Standard delivery usually takes a few business days.",
@@ -114,7 +114,7 @@ RESPONSES = {
         "Your shipment timeline is being reviewed."
     ],
 
-    # 1️⃣5️⃣ EDIT ACCOUNT
+    #  EDIT ACCOUNT
     "edit_account": [
         "I can help update your account details.",
         "Let’s modify your account information.",
@@ -122,7 +122,7 @@ RESPONSES = {
         "Tell me what you'd like to change."
     ],
 
-    # 1️⃣6️⃣ GET INVOICE
+    #  GET INVOICE
     "get_invoice": [
         "I’ll retrieve your invoice.",
         "Your invoice is being prepared.",
@@ -130,7 +130,7 @@ RESPONSES = {
         "Invoice details are on the way."
     ],
 
-    # 1️⃣7️⃣ GET REFUND
+    #  GET REFUND
     "get_refund": [
         "I’ll initiate your refund request.",
         "Your refund is being processed.",
@@ -138,7 +138,7 @@ RESPONSES = {
         "Let me help you with the refund procedure."
     ],
 
-    # 1️⃣8️⃣ NEWSLETTER SUBSCRIPTION
+    #  NEWSLETTER SUBSCRIPTION
     "newsletter_subscription": [
         "Your newsletter subscription has been updated.",
         "I’ve processed your subscription request.",
@@ -146,7 +146,7 @@ RESPONSES = {
         "Your subscription status has been updated."
     ],
 
-    # 1️⃣9️⃣ PAYMENT ISSUE
+    #  PAYMENT ISSUE
     "payment_issue": [
         "I’m checking the payment issue.",
         "There seems to be a payment processing error.",
@@ -154,7 +154,7 @@ RESPONSES = {
         "I’ll help resolve the payment problem."
     ],
 
-    # 2️⃣0️⃣ PLACE ORDER
+    #  PLACE ORDER
     "place_order": [
         "I can help you place a new order.",
         "Let’s proceed with your purchase.",
@@ -162,7 +162,7 @@ RESPONSES = {
         "I’ll guide you through placing the order."
     ],
 
-    # 2️⃣1️⃣ RECOVER PASSWORD
+    #  RECOVER PASSWORD
     "recover_password": [
         "I’ll help you recover your password.",
         "Password recovery instructions have been sent.",
@@ -170,7 +170,7 @@ RESPONSES = {
         "Follow the steps in your email to recover access."
     ],
 
-    # 2️⃣2️⃣ REGISTRATION PROBLEMS
+    #  REGISTRATION PROBLEMS
     "registration_problems": [
         "I’m sorry you’re facing registration issues.",
         "Let me help fix the sign-up problem.",
@@ -178,12 +178,23 @@ RESPONSES = {
         "Let’s troubleshoot the registration issue."
     ],
 
-    # 2️⃣3️⃣ TRACK REFUND
+    #  TRACK REFUND
     "track_refund": [
         "Let me check the status of your refund.",
         "Your refund is currently being processed.",
         "I’m tracking your refund progress.",
         "Here’s the latest update on your refund."
+    ],
+    # TRACK ORDER
+    "track_order": [
+        "Let me check the current status of your order for you.",
+        "Your order is currently in transit and on its way.",
+        "I’ve located your shipment — it’s progressing through the delivery process.",
+        "Your package has been dispatched and is moving toward its destination.",
+        "Here’s the latest update: your order is actively being processed for delivery.",
+        "Your shipment is on schedule and moving through our logistics network.",
+        "I’m tracking your order now — it’s currently en route.",
+        "Everything looks good — your order is advancing toward delivery."
     ],
 
     # 🔹 UNCERTAIN (confidence fallback)

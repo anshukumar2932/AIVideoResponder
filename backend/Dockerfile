@@ -1,34 +1,37 @@
-# Fly.io Dockerfile for AIVideoResponder Backend
-FROM python:3.10-slim
+# Use Python 3.11 (required for scikit-learn >=1.8)
+FROM python:3.11-slim
 
-# Install system dependencies including ffmpeg
+# Prevent Python from buffering stdout/stderr
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies (ffmpeg + audio support)
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libsndfile1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first for better caching
+# Copy only requirements first (for Docker layer caching)
 COPY requirements.txt .
 
-# Install Python dependencies
+# Upgrade pip and install dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application source code
 COPY . .
 
-# Create necessary directories
+# Create uploads directory
 RUN mkdir -p uploads
 
-# Expose port
+# Expose port (Render injects $PORT dynamically)
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8080/')"
+# Optional healthcheck (Render also has its own)
+HEALTHCHECK CMD curl --fail http://localhost:$PORT/ || exit 1
 
-# Run with gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--timeout", "300", "--access-logfile", "-", "--error-logfile", "-", "app:app"]
+# Start application using dynamic PORT (IMPORTANT FOR RENDER)
+CMD ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 300 --access-logfile - --error-logfile -"]

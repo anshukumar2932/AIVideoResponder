@@ -1,122 +1,89 @@
 # AIVideoResponder
 
-An AI-powered customer support system that processes voice input and generates video responses with synchronized visemes.
+AI-powered customer support system that processes voice input and generates video responses with synchronized lip movements (visemes).
 
-## Project Structure
+## 🚀 Quick Start
 
-```
-AIVideoResponder/
-├── backend/          # Flask API server
-│   ├── src/         # Core Python modules
-│   ├── database/    # Database files and schemas
-│   ├── dataset/     # Video datasets for visemes
-│   ├── app.py       # Main Flask application
-│   └── requirements.txt
-├── frontend/        # React web application
-│   ├── src/         # React components and pages
-│   ├── public/      # Static assets
-│   └── package.json
-└── README.md
-```
+### Local Development
 
-## Features
-
-- **Speech Recognition**: Convert audio input to text using Whisper
-- **Intent Classification**: Predict user intent using machine learning
-- **Response Generation**: Generate appropriate responses based on intent
-- **Text-to-Speech**: Convert responses to audio using Edge TTS
-- **Video Generation**: Create videos with synchronized lip movements (visemes)
-
-## Deployment on Render
-
-### Backend Deployment
-
-1. Create a new Web Service on Render
-2. Connect your GitHub repository
-3. Set root directory to `backend`
-4. Configure build and start commands:
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python app.py`
-   - **Environment**: Python 3.9.16
-
-### Frontend Deployment
-
-1. Create a new Static Site on Render
-2. Connect your GitHub repository
-3. Set root directory to `frontend`
-4. Configure build settings:
-   - **Build Command**: `npm install && npm run build`
-   - **Publish Directory**: `dist`
-
-### Environment Configuration
-
-Update the frontend environment variables to point to your deployed backend:
-
-```bash
-# In frontend/.env
-VITE_API_URL=https://your-backend-service.onrender.com
-```
-
-## Local Development
-
-### Backend Setup
-
+**Backend:**
 ```bash
 cd backend
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ```
 
-### Frontend Setup
-
+**Frontend:**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## API Documentation
+### Deployment
 
-### Endpoints
-
-- `GET /`: Health check
-- `POST /support`: Process audio file and return AI response
-- `GET /video`: Serve generated response video
-
-### Request Format
-
+**Backend → Fly.io:**
 ```bash
-curl -X POST \
-  -F "audio=@recording.wav" \
-  https://your-backend-url.onrender.com/support
+cd backend
+fly launch --name aivideo-backend
+fly deploy
 ```
 
-### Response Format
+**Frontend → Vercel:**
+1. Push code to GitHub
+2. Import to Vercel: https://vercel.com/new
+3. Set Root Directory: `frontend`
+4. Add env var: `VITE_API_URL=https://aivideo-backend.fly.dev`
 
-```json
-{
-  "user_text": "I need help with my account",
-  "intent": "account_support",
-  "response": "I'd be happy to help you with your account...",
-  "video_url": "/video"
-}
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
+
+## 📁 Project Structure
+
+```
+AIVideoResponder/
+├── backend/              # Flask API (Fly.io)
+│   ├── src/             # Core modules
+│   ├── database/        # Database files
+│   ├── dataset/         # Viseme videos
+│   ├── app.py           # Main application
+│   ├── Dockerfile       # Fly.io deployment
+│   └── fly.toml         # Fly.io config
+├── frontend/            # React app (Vercel)
+│   ├── src/             # Components & pages
+│   ├── vercel.json      # Vercel config
+│   └── package.json
+└── README.md
 ```
 
-## Technologies Used
+## ✨ Features
 
-### Backend
-- Flask (Web framework)
-- Whisper (Speech recognition)
-- Scikit-learn (Intent classification)
-- Edge TTS (Text-to-speech)
-- OpenCV (Video processing)
+- 🎤 Speech-to-text (Whisper)
+- 🤖 Intent classification (ML)
+- 💬 Intelligent responses
+- 🔊 Text-to-speech (Edge TTS)
+- 🎬 Video generation with lip-sync
 
-### Frontend
+## 🛠️ Tech Stack
+
+**Backend:**
+- Flask + Gunicorn
+- OpenAI Whisper
+- Sentence Transformers
+- FFmpeg (video processing)
+
+**Frontend:**
 - React 19
-- Vite (Build tool)
-- Tailwind CSS (Styling)
-- React Router (Navigation)
+- Vite
+- Tailwind CSS
+- React Router
 
-## License
+## 📚 Documentation
+
+- [Deployment Guide](DEPLOYMENT_GUIDE.md) - Full deployment instructions
+- [Quick Start](QUICK_START.md) - Deploy in 5 minutes
+
+## 📝 License
 
 MIT License

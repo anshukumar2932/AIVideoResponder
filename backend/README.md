@@ -1,41 +1,46 @@
 # AIVideoResponder Backend
 
-Flask backend for the AI Video Responder application.
+Flask API for AI-powered customer support with video generation.
 
-## Features
+## 🚀 Quick Start
 
-- Speech-to-text processing
-- Intent prediction
-- Response generation
-- Text-to-speech conversion
-- Video generation with visemes
-
-## Deployment on Render
-
-1. Connect your GitHub repository to Render
-2. Create a new Web Service
-3. Set the root directory to `backend`
-4. Use the following settings:
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python app.py`
-   - **Environment**: Python 3.9.16
-
-## Environment Variables
-
-- `PORT`: Automatically set by Render (default: 5000)
-
-## API Endpoints
-
-- `GET /`: Health check
-- `POST /support`: Process audio and generate response
-- `GET /video`: Serve generated video
-
-## Local Development
-
+### Local Development
 ```bash
-cd backend
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
 
-The server will run on `http://localhost:5000`
+Server runs on `http://localhost:5000`
+
+### Deploy to Fly.io
+```bash
+fly launch --name aivideo-backend
+fly deploy
+```
+
+## 📡 API Endpoints
+
+- `GET /` - Health check
+- `POST /text-support` - Text-based support
+- `POST /support` - Audio-based support (with video)
+- `GET /video` - Serve generated video
+- `GET /system-info` - System information
+
+## 🔧 Environment Variables
+
+- `PORT` - Server port (default: 5000)
+- `FLASK_ENV` - Environment (production/development)
+
+## 📦 Dependencies
+
+- Flask - Web framework
+- Whisper - Speech recognition
+- Sentence Transformers - Intent classification
+- Edge TTS - Text-to-speech
+- FFmpeg - Video processing
+
+## 🐳 Docker
+
+Built with Dockerfile for Fly.io deployment with FFmpeg support.

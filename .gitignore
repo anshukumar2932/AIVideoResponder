@@ -20,6 +20,37 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Node.js
 node_modules/
@@ -27,20 +58,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+package-lock.json
+yarn.lock
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Build outputs
+dist/
+build/
+*.tgz
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Logs
+logs/
+*.log
 
 # OS
 .DS_Store
@@ -50,54 +78,97 @@ yarn-error.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Logs
-logs
-*.log
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# Dependency directories
-node_modules/
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# Generated files
+# Application specific
 uploads/
 *.mp4
 *.mp3
 *.wav
+*.avi
+*.mov
+temp_*.mp4
+list.txt
+response*.mp3
+final.mp4
+test_*.mp4
+test_*.mp3
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
-# pyenv
-.python-version
+# Coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+# Translations
+*.mo
+*.pot
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mkdocs
+/site
+
+# Backup files
+*.bak
+*.backup
+
+# Deployment
+.vercel
+.fly
+fly.toml.bak
+
+# Local development
+.local/
+local_settings.py
